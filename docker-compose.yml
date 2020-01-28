@@ -2,19 +2,38 @@ version: "3"
 services:
     lavagna:
         build: .
+        networks:
+            - host
         ports:
             - "80:8080"
-    MySQL:
-        image: mysql:5.7
-        environment: 
-            - "MYSQL_ROOT_PASSWORD=pass"
-        ports: 
-            - "81:3306"
-        volumes: 
+    # MySQL:
+    #     image: mysql:5.7
+    #     networks:
+    #         - host
+    #     environment: 
+    #         - "MYSQL_ROOT_PASSWORD=pass"
+    #     ports: 
+    #         - "81:3306"
+    #     volumes: 
+    #         - "/home/bynet13/Desktop/lavagna/project/init.sql:/docker-entrypoint-initdb.d/init.sql"
+    #         - "database2:/var/lib/mysql"
+    post:
+        image: postgres
+        networks:
+            - host
+        ports:
+            - "81:5432"
+        volumes:
             - "/home/bynet13/Desktop/lavagna/project/init.sql:/docker-entrypoint-initdb.d/init.sql"
-            - "database2:/var/lib/mysql"
+        #     - "/home/bynet13/Desktop/lavagna/project/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh"
+            - "database13:/var/lib/postgresql/data"
+        environment:
+            - "POSTGRES_USER=postgres" 
+            - "POSTGRES_PASSWORD=pass"
     nginx:
         image: nginx
+        networks:
+            - host
         volumes:
             - "/home/bynet13/Desktop/lavagna/project/nginx.conf:/etc/nginx/nginx.conf"
             - "/home/bynet13/Desktop/lavagna/project/minimal/src/main/webapp:/usr/share/nginx/html/static"
@@ -33,3 +52,7 @@ services:
     #         - "lavagna"
 volumes:
     database2:
+    database13:
+networks: 
+    host:
+        driver: bridge

@@ -1,10 +1,11 @@
 #!/bin/sh
 # cd ./target
-while ! wget http://MySQL:3306 ; do sleep 1
-done
-java -Ddatasource.dialect=MYSQL \
--Ddatasource.url=jdbc:mysql://MySQL:3306/lavagna?useSSL=false \
--Ddatasource.username=root \
--Ddatasource.password=pass \
+# while ! wget http://post:5432 ; do 
+sleep 5
+# done
+java -Ddatasource.dialect=PGSQL \
 -Dspring.profile.active=prod \
+-Ddatasource.url=jdbc:postgresql://post:5432/lavagna \
+-Ddatasource.username=postgres \
+-Ddatasource.password=pass \
 -jar lavagna-jetty-console.war
