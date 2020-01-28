@@ -1,0 +1,35 @@
+version: "3"
+services:
+    lavagna:
+        build: .
+        ports:
+            - "80:8080"
+    MySQL:
+        image: mysql:5.7
+        environment: 
+            - "MYSQL_ROOT_PASSWORD=pass"
+        ports: 
+            - "81:3306"
+        volumes: 
+            - "/home/bynet13/Desktop/lavagna/project/init.sql:/docker-entrypoint-initdb.d/init.sql"
+            - "database2:/var/lib/mysql"
+    nginx:
+        image: nginx
+        volumes:
+            - "/home/bynet13/Desktop/lavagna/project/nginx.conf:/etc/nginx/nginx.conf"
+            - "/home/bynet13/Desktop/lavagna/project/minimal/src/main/webapp:/usr/share/nginx/html/static"
+        ports:
+            - "82:80"
+        #     - "90:85"
+        # depends_on:
+        #     - "doc"
+    # doc:
+    #     build: 
+    #         context: /home/bynet13/Desktop/lavagna/project/minimal
+    #         dockerfile: /home/bynet13/Desktop/lavagna/project/doc/Dockerfile
+    #     ports:
+    #         - "85:45001"
+    #     depends_on:
+    #         - "lavagna"
+volumes:
+    database2:
